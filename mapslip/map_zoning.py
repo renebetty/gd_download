@@ -55,7 +55,7 @@ class MapZoning:
 
     def get_area_points_x(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 1:
+        if i_temp > 40:
             return
         if quadrant == 1:
             location = points[2]
@@ -75,7 +75,7 @@ class MapZoning:
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 120:
+        if i_temp > 60:
             return
         if quadrant == 1:
             location = points[0]
@@ -92,6 +92,7 @@ class MapZoning:
             res_points.append(tmp_pos)
         print("y的i_temp = " + str(i_temp))
         i_temp += 1
+        time.sleep(5)
         self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, i_temp)
 
@@ -127,7 +128,7 @@ class MapZoning:
                     self.location_validated[v_key] = 1
             elif v_value == 1:
                 b_result = True
-        print(b_result)
+        # print(b_result)
         return b_result
 
     def zoning(self):
@@ -136,12 +137,12 @@ class MapZoning:
         print(self.get_lat_unit(self.distance))
         res_points = []
         location = self.map_service.get_geo_code(self.city).split(',')
-        self.get_all_area_points(1, res_points, location)
-        # self.get_all_area_points(2, res_points, location)
+        # self.get_all_area_points(1, res_points, location)
+        self.get_all_area_points(2, res_points, location)
         # self.get_all_area_points(3, res_points, location)
         # self.get_all_area_points(4, res_points, location)
         # Python引入了with语句来自动帮我们调用close()方法
-        with open('../mapslip_data/points_xx1.json', 'w', encoding='utf-8') as _file:
+        with open('../mapslip_data/points_xx2.json', 'w', encoding='utf-8') as _file:
             # json.dumps将一个Python数据结构转换为JSON
             _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
