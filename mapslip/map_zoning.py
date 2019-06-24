@@ -55,7 +55,7 @@ class MapZoning:
 
     def get_area_points_x(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 3:
+        if i_temp > 1:
             return
         if quadrant == 1:
             location = points[2]
@@ -70,13 +70,12 @@ class MapZoning:
         tmp_pos = self._get_area_points(quadrant, location)
         if self.validate_points(tmp_pos):
             res_points.append(tmp_pos)
-
         i_temp += 1
         self.get_area_points_x(quadrant, res_points, tmp_pos, i_temp)
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 3:
+        if i_temp > 120:
             return
         if quadrant == 1:
             location = points[0]
@@ -91,7 +90,7 @@ class MapZoning:
         tmp_pos = self._get_area_points(quadrant, location)
         if self.validate_points(tmp_pos):
             res_points.append(tmp_pos)
-        print(i_temp)
+        print("y的i_temp = " + str(i_temp))
         i_temp += 1
         self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, i_temp)
@@ -99,7 +98,7 @@ class MapZoning:
     def get_all_area_points(self, quadrant, res_points, location):
         tmp_pos = self._get_area_points(quadrant, location)
         res_points.append(tmp_pos)
-        self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
+        # self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, 1)
 
     # 验证列表中的点是不是在所属城市中
@@ -110,8 +109,10 @@ class MapZoning:
         for location in points:
             location[0] = float(location[0])
             location[1] = float(location[1])
-            # if location[0] < 118.791291 or location[1] < 32.121400 or location[1] > 32.053060 or location[0] > 118.70000:
-            #     continue
+            # 南京的大矩形范围，超过这个范围即跳过这个点的判断
+            if location[0] < 118.358459 or location[1] < 31.2116 or location[1] > 32.62432 or location[0] > 119.2116:
+                print("out of NJ")
+                continue
             v_key = ','.join([str(x) for x in location])
             v_value = self.location_validated.get(v_key)
             # 如果该点对应的结果值是空，说明以前未判断过，做判断是否属于该城市
@@ -139,8 +140,10 @@ class MapZoning:
         # self.get_all_area_points(2, res_points, location)
         # self.get_all_area_points(3, res_points, location)
         # self.get_all_area_points(4, res_points, location)
-        # with open('tmp/points.js', 'w', encoding='utf-8') as _file:
-        #     _file.write('var points = ' + json.dumps(res_points) + ';')
+        # Python引入了with语句来自动帮我们调用close()方法
+        with open('../mapslip_data/points_xx1.json', 'w', encoding='utf-8') as _file:
+            # json.dumps将一个Python数据结构转换为JSON
+            _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
         # points = [['113.980092', '22.475719'], ['113.984953', '22.475719'], ['113.984953', '22.471227'],
         #            ['113.980092', '22.471227']]
@@ -152,6 +155,7 @@ class MapZoning:
         print(location)
         print(res_points)
         print(len(res_points))
+        print(self.location_validated)
         print(self.location_validated.values())
         print(len(self.location_validated))
         return res_points
