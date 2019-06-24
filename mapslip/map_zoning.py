@@ -75,7 +75,7 @@ class MapZoning:
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 60:
+        if i_temp > 95:
             return
         if quadrant == 1:
             location = points[0]
@@ -120,8 +120,7 @@ class MapZoning:
             if not v_value:
                 res = self.map_service.get_geo_address(location)
                 address_component = res.get('regeocode').get('addressComponent') if res and res.get('regeocode') else {}
-                if not address_component or address_component.get('citycode') != '025' or address_component.get(
-                        'seaArea'):
+                if not address_component or address_component.get('citycode') != '025':
                     self.location_validated[v_key] = 2
                 else:
                     b_result = True
@@ -138,11 +137,11 @@ class MapZoning:
         res_points = []
         location = self.map_service.get_geo_code(self.city).split(',')
         # self.get_all_area_points(1, res_points, location)
-        self.get_all_area_points(2, res_points, location)
-        # self.get_all_area_points(3, res_points, location)
+        # self.get_all_area_points(2, res_points, location)
+        self.get_all_area_points(3, res_points, location)
         # self.get_all_area_points(4, res_points, location)
         # Python引入了with语句来自动帮我们调用close()方法
-        with open('../mapslip_data/points_xx2.json', 'w', encoding='utf-8') as _file:
+        with open('../mapslip_data/points_xx3.json', 'w', encoding='utf-8') as _file:
             # json.dumps将一个Python数据结构转换为JSON
             _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
