@@ -55,7 +55,7 @@ class MapZoning:
 
     def get_area_points_x(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 40:
+        if i_temp > 1:
             return
         if quadrant == 1:
             location = points[2]
@@ -75,7 +75,7 @@ class MapZoning:
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 95:
+        if i_temp > 5:
             return
         if quadrant == 1:
             location = points[0]
@@ -90,7 +90,7 @@ class MapZoning:
         tmp_pos = self._get_area_points(quadrant, location)
         if self.validate_points(tmp_pos):
             res_points.append(tmp_pos)
-        print("y的i_temp = " + str(i_temp))
+        print("y的i_temp = " + str(i_temp) + "y的tmp_pos = " + str(tmp_pos))
         i_temp += 1
         time.sleep(5)
         self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
@@ -99,7 +99,7 @@ class MapZoning:
     def get_all_area_points(self, quadrant, res_points, location):
         tmp_pos = self._get_area_points(quadrant, location)
         res_points.append(tmp_pos)
-        # self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
+        self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, 1)
 
     # 验证列表中的点是不是在所属城市中
@@ -136,12 +136,12 @@ class MapZoning:
         print(self.get_lat_unit(self.distance))
         res_points = []
         location = self.map_service.get_geo_code(self.city).split(',')
-        # self.get_all_area_points(1, res_points, location)
+        self.get_all_area_points(1, res_points, location)
         # self.get_all_area_points(2, res_points, location)
-        self.get_all_area_points(3, res_points, location)
+        # self.get_all_area_points(3, res_points, location)
         # self.get_all_area_points(4, res_points, location)
         # Python引入了with语句来自动帮我们调用close()方法
-        with open('../mapslip_data/points_xx3.json', 'w', encoding='utf-8') as _file:
+        with open('../mapslip_data/points_xx1-bc2.json', 'w', encoding='utf-8') as _file:
             # json.dumps将一个Python数据结构转换为JSON
             _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
