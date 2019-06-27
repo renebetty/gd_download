@@ -11,7 +11,7 @@ class MapZoning:
         self.distance = distance if distance else 1  # 单位km，默认0.5km
         self.earth_radius = 40075.04 / (2 * math.pi)   #地球平均周长约4万千米,地球赤道半径
         self.lat_unit = self.get_lat_unit(self.distance)   #分块单元纬度
-        self.map_service = map_service if map_service else Map('a0388c101f02224cea904687ee273906')
+        self.map_service = map_service if map_service else Map('814090f867a112f796fee1d45baf8f35')
         self.location_validated = {}  # key：[经度,维度] value: 1验证成功，2超出范围
 
     # 获取一定距离的纬度单位
@@ -55,7 +55,7 @@ class MapZoning:
 
     def get_area_points_x(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 1:
+        if i_temp > 45:
             return
         if quadrant == 1:
             location = points[2]
@@ -75,7 +75,7 @@ class MapZoning:
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 5:
+        if i_temp > 65:
             return
         if quadrant == 1:
             location = points[0]
@@ -92,7 +92,7 @@ class MapZoning:
             res_points.append(tmp_pos)
         print("y的i_temp = " + str(i_temp) + "y的tmp_pos = " + str(tmp_pos))
         i_temp += 1
-        time.sleep(5)
+        time.sleep(3)
         self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, i_temp)
 
@@ -111,7 +111,7 @@ class MapZoning:
             location[0] = float(location[0])
             location[1] = float(location[1])
             # 南京的大矩形范围，超过这个范围即跳过这个点的判断
-            if location[0] < 118.358459 or location[1] < 31.2116 or location[1] > 32.62432 or location[0] > 119.2116:
+            if location[0] < 118.332459 or location[1] < 31.2116 or location[1] > 32.62432 or location[0] > 119.2516:
                 print("out of NJ")
                 continue
             v_key = ','.join([str(x) for x in location])
@@ -141,7 +141,7 @@ class MapZoning:
         # self.get_all_area_points(3, res_points, location)
         # self.get_all_area_points(4, res_points, location)
         # Python引入了with语句来自动帮我们调用close()方法
-        with open('../mapslip_data/points_xx1-bc2.json', 'w', encoding='utf-8') as _file:
+        with open('../mapslip_data/points_xx10627.json', 'w', encoding='utf-8') as _file:
             # json.dumps将一个Python数据结构转换为JSON
             _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
