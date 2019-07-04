@@ -11,7 +11,7 @@ class MapZoning:
         self.distance = distance if distance else 1  # 单位km，默认0.5km
         self.earth_radius = 40075.04 / (2 * math.pi)   #地球平均周长约4万千米,地球赤道半径
         self.lat_unit = self.get_lat_unit(self.distance)   #分块单元纬度
-        self.map_service = map_service if map_service else Map('11a751404c14fc917ff1ad27529d3cca')
+        self.map_service = map_service if map_service else Map('a0388c101f02224cea904687ee273906')
         self.location_validated = {}  # key：[经度,维度] value: 1验证成功，2超出范围
 
     # 获取一定距离的纬度单位
@@ -75,7 +75,7 @@ class MapZoning:
 
     def get_area_points_y(self, quadrant, res_points, points, i_temp):
         # if i_temp > 60:
-        if i_temp > 65:   # 65  and  30
+        if i_temp > 30:   # 65  and  30
             return
         if quadrant == 1:
             location = points[0]
@@ -98,7 +98,7 @@ class MapZoning:
 
     def get_all_area_points(self, quadrant, res_points, location):
         tmp_pos = self._get_area_points(quadrant, location)
-        # tmp_pos = [[118.786344, 31.47636], [118.796877, 31.47636], [118.796877, 31.467377], [118.786344, 31.467377]]
+        tmp_pos = [[118.796877, 31.47636], [118.80741, 31.47636], [118.80741, 31.467377], [118.796877, 31.467377]]
         res_points.append(tmp_pos)
         self.get_area_points_x(quadrant, res_points, tmp_pos, 1)
         self.get_area_points_y(quadrant, res_points, tmp_pos, 1)
@@ -142,7 +142,7 @@ class MapZoning:
         # self.get_all_area_points(3, res_points, location)
         self.get_all_area_points(4, res_points, location)
         # Python引入了with语句来自动帮我们调用close()方法
-        with open('../mapslip_data/points_xx40629-01.json', 'w', encoding='utf-8') as _file:
+        with open('../mapslip_data/points--test.json', 'w', encoding='utf-8') as _file:
             # json.dumps将一个Python数据结构转换为JSON
             _file.write('var points = ' + json.dumps(res_points) + ';')
         print(time.time())
